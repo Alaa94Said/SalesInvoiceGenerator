@@ -1,13 +1,18 @@
 
 package sales.model;
 
+import java.util.ArrayList;
+
 public class InvoiceLine {
     private String itemName;
     private double unitPrice;
     private int count;
     private InvoiceHeader header;
+    private ArrayList<InvoiceLine> item;
+   private ArrayList<InvoiceLine> invoiceItemsList;
+    
 
-    public InvoiceLine(String itemName, double unitPrice, int count, InvoiceHeader header) {
+    public InvoiceLine(  String itemName, double unitPrice, int count, InvoiceHeader header) {
         this.itemName = itemName;
         this.unitPrice = unitPrice;
         this.count = count;
@@ -48,6 +53,15 @@ public class InvoiceLine {
 
     public double getLineTotal() {
         return count * unitPrice;
+    }
+    public ArrayList<InvoiceLine> getItemLine() {
+        if (item == null) {
+            item = new ArrayList<>();
+        }
+        return item;
+    }
+    public ArrayList<InvoiceLine> getInvoiceItemsList() {
+        return invoiceItemsList;
     }
 
     @Override

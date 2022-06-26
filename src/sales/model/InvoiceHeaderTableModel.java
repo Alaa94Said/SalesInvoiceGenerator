@@ -13,8 +13,9 @@ import javax.swing.table.AbstractTableModel;
  * @author DELL
  */
 public class InvoiceHeaderTableModel extends AbstractTableModel {
+    
     private ArrayList<InvoiceHeader> data;
-    private String[] cols = {"Id", "Customer Name", "Invoice Date"};
+    private String[] cols = {"Id", "Invoice Date","Customer Name"};
 
     public InvoiceHeaderTableModel(ArrayList<InvoiceHeader> data) {
         this.data = data;
@@ -37,12 +38,25 @@ public class InvoiceHeaderTableModel extends AbstractTableModel {
             case 0:
                 return header.getId();
             case 1:
-                return header.getCustomerName();
-            case 2:
                 return header.getDate();
+            case 2:
+                return header.getCustomerName();
         }
         return "";
     }
+     /*@Override
+    public Object setValueAt(int rowIndex, int columnIndex) {
+        InvoiceHeader headerSet = data.get(rowIndex);
+        switch (columnIndex) {
+            case 0:
+                return headerSet.setId();
+            case 1:
+                return headerSet.getDate();
+            case 2:
+                return headerSet.getCustomerName();
+        }
+        return "";
+    }*/
 
     @Override
     public String getColumnName(int column) {
