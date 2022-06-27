@@ -1,7 +1,9 @@
 
 package sales.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class InvoiceHeader {
     private int id;
@@ -13,6 +15,15 @@ public class InvoiceHeader {
         this.id = id;
         this.customerName = customerName;
         this.date = date;
+    }
+    
+    @Override
+    public String toString()
+    {
+        SimpleDateFormat DateFor = new SimpleDateFormat("dd-MM-yyyy");
+      String stringDate= DateFor.format(new Date());
+
+        return "\n" + this.id + "," + stringDate + "," + this.customerName ;
     }
 
     public String getDate() {
@@ -47,10 +58,7 @@ public class InvoiceHeader {
         return total;
     }
 
-    @Override
-    public String toString() {
-        return "InvoiceHeader{" + "id=" + id + ", customerName=" + customerName + ", date=" + date + '}';
-    }
+  
 
     public ArrayList<InvoiceLine> getLines() {
         if (lines == null) {
