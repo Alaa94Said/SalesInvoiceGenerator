@@ -76,7 +76,7 @@ public class InvoiceLine {
     @Override
     public String toString() { 
         
-         return  this.header.getId() + itemName + "," + unitPrice+ "," + count + "," + getLineTotal();
+         return  this.header.getId() + "," + itemName + "," + unitPrice+ "," + count + "," + getLineTotal();
          
          }
 
