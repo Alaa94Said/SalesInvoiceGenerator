@@ -4,10 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,13 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import sales.model.InvoiceHeader;
 import sales.model.InvoiceLine;
@@ -33,17 +26,16 @@ import sales.view.SalesFrame;
 
 public class Controller implements ActionListener, ListSelectionListener {
 
-    private SalesFrame frame;
+    private final SalesFrame frame;
     private String hfilePath;
     private String ifilePath;
     private String selectedRow;
-    private String selecteditem;
     private InvoiceLine item;
     private InvoiceHeader invoice;
     private ArrayList<InvoiceHeader> invoiceHeadersList;
     private ArrayList<InvoiceLine> invoiceItemsList;
-  private DefaultTableModel tablemodel;
-  private static final int TABLE_COUNT = 2;
+    private InvoiceHeader header;
+ 
     
    
 
@@ -54,6 +46,7 @@ public class Controller implements ActionListener, ListSelectionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String actionCommand = e.getActionCommand();
+        System.out.println(actionCommand + "done");
         switch (actionCommand) {
             case "Load Files":
                 loadFiles();
@@ -76,8 +69,8 @@ public class Controller implements ActionListener, ListSelectionListener {
             case "Save":
                 Save();
                 break;
-            case "ok":
-               addItem();
+            case "jButton3":
+                addItem();
                break;
                 
         }
@@ -94,7 +87,10 @@ public class Controller implements ActionListener, ListSelectionListener {
             return;
         //bigebo l related invoice items
         ArrayList<InvoiceLine> lines = frame.getInvoiceHeadersList().get(Integer.parseInt(selectedRow)).getLines();
+        this.invoiceItemsList=lines;
         frame.getInvLineTable().setModel(new InvoiceLineTableModel(lines));
+        
+        
         ///////////display value in text fields /////////
         int i=frame.getInvHeaderTable().getSelectedRow();
         TableModel model =frame.getInvHeaderTable().getModel();
@@ -102,33 +98,7 @@ public class Controller implements ActionListener, ListSelectionListener {
         frame.getInvDatetxt().setText(model.getValueAt(i, 1).toString());
         frame.getNametxt().setText(model.getValueAt(i, 2).toString());
         frame.getTotallbl().setText(model.getValueAt(i, 3).toString());
-        ////////////////////////////
-        
-        ListSelectionGroup listSelectionGroup = new ListSelectionGroup();
-        //setLayout(new GridLayout(1, 0));
-        for (int j = 0; j < TABLE_COUNT; j++) {
-            TableModel modele = frame.getInvLineTable().getModel();
-            ListSelectionModel selectionModel = frame.getInvLineTable().getSelectionModel();
-            listSelectionGroup.register(selectionModel);
-            
-        }
-        
-       /* System.out.println(" item Selected");
-        this.selecteditem = frame.getInvLineTable().getSelectedRow()+""; 
-        System.out.println(selecteditem);
-      
-        ArrayList<InvoiceLine> newList=new ArrayList<InvoiceLine>();
-        for(int i=0 ; i< this.invoiceItemsList.size() ; i++)
-        {
-            InvoiceLine invoice = this.invoiceItemsList.get(i);
-                if(i != Integer.parseInt(this.selecteditem) ){
-                    newList.add(invoice);}
-        }
-        this.invoiceItemsList = newList;
-        frame.setinvoiceItemsList(this.invoiceItemsList); //birsm l table mnl awel
-        
-     return;*/
-        
+         
     }
   
     
@@ -166,6 +136,21 @@ public class Controller implements ActionListener, ListSelectionListener {
          }
 
     private void Cancel() {
+        System.out.println(this.frame.selecteditem);
+        ArrayList<InvoiceLine> newItemList=new ArrayList<InvoiceLine>();
+        
+        for(int i=0 ; i< this.invoiceItemsList.size() ; i++)
+        {
+            if (invoiceItemsList==null)
+            break;
+            InvoiceLine in = this.invoiceItemsList.get(i);
+                if(i != Integer.parseInt(this.frame.selecteditem) ){
+                    newItemList.add(in);}
+        }
+        this.invoiceItemsList = newItemList;
+        frame.setinvoiceItemsList(this.invoiceItemsList); //birsm l table mnl awel
+        
+
     }
 
     private void Save() {
@@ -177,14 +162,17 @@ public class Controller implements ActionListener, ListSelectionListener {
     }
    
     private void addItem() {
-         item = new InvoiceLine(this.frame.getItemName(),
-               Integer.parseInt(this.frame.getItemPrice()),
+        System.out.println(this.invoiceItemsList);
+        System.out.println("add item clicked");
+      item = new InvoiceLine(Integer.parseInt(this.frame.getID()),
+              this.frame.getItemName(),
+               Double.parseDouble(this.frame.getItemPrice()),
                  Integer.parseInt(this.frame.getCount()),
-                 invoice );
-         
+                 header);
         this.invoiceItemsList.add(item);
          frame.setinvoiceItemsList(this.invoiceItemsList); 
     }
+    
     private void loadFiles() {
         try {
             JFileChooser fc = new JFileChooser();
@@ -237,7 +225,7 @@ public class Controller implements ActionListener, ListSelectionListener {
                         int count = Integer.parseInt(parts[3]);
                         InvoiceHeader header = getInvoiceHeaderById(invoiceHeadersList, invId);
                         if(header!=null){
-                        InvoiceLine invLine = new InvoiceLine(parts[1], price, count, header);
+                        InvoiceLine invLine = new InvoiceLine(invId,parts[1], price, count, header);
                         header.getLines().add(invLine);
                     }}
                     frame.setInvoiceHeadersList(invoiceHeadersList);
@@ -261,6 +249,7 @@ public class Controller implements ActionListener, ListSelectionListener {
             for(int i=0 ; i< this.invoiceHeadersList.size() ; i++)
         {
             InvoiceHeader invoice = this.invoiceHeadersList.get(i);
+            this.header=invoice;
             bwh.write(invoice.toString());
             bwh.newLine();
         } bwh.close();
@@ -269,12 +258,19 @@ public class Controller implements ActionListener, ListSelectionListener {
         }
        FileWriter fwi;
         try {
+             File x = new File(ifilePath);
+            if(x.exists())
+            x.delete();
+            
             fwi = new FileWriter(this.ifilePath, true);
             BufferedWriter bwi = new BufferedWriter(fwi);
           
-            for(int i=0 ; i< this.invoiceHeadersList.size() ; i++)
+            for(int i=0 ; i< this.invoiceItemsList.size() ; i++)
         {
-            InvoiceHeader InvWriter = this.invoiceHeadersList.get(i);
+            InvoiceLine InvWriter = this.invoiceItemsList.get(i);
+            InvWriter.setHeader(header);
+            System.out.println(header.getId() + "ID is ");
+            
                  bwi.write(InvWriter.toString());
                  bwi.newLine();
         }

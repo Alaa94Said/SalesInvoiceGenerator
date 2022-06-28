@@ -29,7 +29,7 @@ public class Controller1 implements ActionListener, ListSelectionListener  {
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        System.out.println(" item Selected");
+      System.out.println(" item Selected");
         this.selecteditem = frame.getInvLineTable().getSelectedRow()+""; 
         System.out.println(selecteditem);
       

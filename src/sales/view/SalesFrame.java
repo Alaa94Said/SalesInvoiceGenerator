@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import sales.controller.Controller;
+import sales.controller.Controller1;
 import sales.model.InvoiceHeader;
 import sales.model.InvoiceHeaderTableModel;
 import sales.model.InvoiceLine;
@@ -22,6 +23,8 @@ import sales.model.InvoiceLineTableModel;
  * @author DELL
  */
 public class SalesFrame extends javax.swing.JFrame {
+
+    public String selecteditem;
 
     /**
      * Creates new form SalesFrame
@@ -49,15 +52,15 @@ public class SalesFrame extends javax.swing.JFrame {
         itemName = new javax.swing.JTextField();
         itemPrice = new javax.swing.JTextField();
         Count = new javax.swing.JTextField();
-        itemTotal = new javax.swing.JTextField();
-        ok = new javax.swing.JButton();
-        Number = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jButton3.addActionListener(controller);
+        ID = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         invHeaderTable = new javax.swing.JTable();
         invHeaderTable.getSelectionModel().addListSelectionListener(controller);
         jScrollPane2 = new javax.swing.JScrollPane();
         invLineTable = new javax.swing.JTable();
-        invLineTable.getSelectionModel().addListSelectionListener(controller1);
+        invLineTable.getSelectionModel().addListSelectionListener(Controller1);
         jButton1 = new javax.swing.JButton();
         jButton1.addActionListener(controller);
         jButton2 = new javax.swing.JButton();
@@ -143,54 +146,49 @@ public class SalesFrame extends javax.swing.JFrame {
         Count.setText("Count");
         Count.setActionCommand("Count");
 
-        itemTotal.setText("item total");
-        itemTotal.setActionCommand("item total");
+        jButton3.setText("jButton3");
 
-        ok.setText("ok");
-        ok.setActionCommand("ok");
-        ok.addActionListener(new java.awt.event.ActionListener() {
+        ID.setText("ID");
+        ID.setActionCommand("ID");
+        ID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                okActionPerformed(evt);
+                IDActionPerformed(evt);
             }
         });
-
-        Number.setText("Number");
-        Number.setActionCommand("Number");
 
         javax.swing.GroupLayout jDialog2Layout = new javax.swing.GroupLayout(jDialog2.getContentPane());
         jDialog2.getContentPane().setLayout(jDialog2Layout);
         jDialog2Layout.setHorizontalGroup(
             jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialog2Layout.createSequentialGroup()
-                .addGap(117, 117, 117)
                 .addGroup(jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(itemTotal, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(Count, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(itemPrice, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDialog2Layout.createSequentialGroup()
-                            .addGap(38, 38, 38)
-                            .addComponent(ok)))
-                    .addComponent(Number, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(132, Short.MAX_VALUE))
+                    .addGroup(jDialog2Layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addGroup(jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(Count, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(itemPrice, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jDialog2Layout.createSequentialGroup()
+                        .addGap(205, 205, 205)
+                        .addComponent(jButton3)))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
         jDialog2Layout.setVerticalGroup(
             jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialog2Layout.createSequentialGroup()
-                .addContainerGap(61, Short.MAX_VALUE)
-                .addComponent(Number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(ID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(itemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Count, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(itemTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(ok)
-                .addGap(42, 42, 42))
+                .addGap(46, 46, 46)
+                .addComponent(jButton3)
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -222,6 +220,11 @@ public class SalesFrame extends javax.swing.JFrame {
         invLineTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         invLineTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         invLineTable.setShowHorizontalLines(true);
+        invLineTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                invLineTableMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(invLineTable);
 
         jButton1.setText("Create New Invoice");
@@ -280,14 +283,12 @@ public class SalesFrame extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton4)))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addComponent(InvTotaltxt, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(Namelbl)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(InvTotaltxt, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(Nametxt, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Nametxt, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(l)
@@ -310,13 +311,13 @@ public class SalesFrame extends javax.swing.JFrame {
                             .addComponent(l, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(InvNumlbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(h)
-                            .addComponent(InvDatetxt))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(InvDatetxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(h))
                         .addGap(8, 8, 8)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(Namelbl)
-                            .addComponent(Nametxt))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Nametxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Namelbl))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Totallbl)
@@ -351,13 +352,21 @@ public class SalesFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_newItemActionPerformed
 
-    private void okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_okActionPerformed
-
     private void itemNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_itemNameActionPerformed
+
+    private void invLineTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_invLineTableMouseClicked
+        // TODO add your handling code here:
+        System.out.println(" item Selected");
+        this.selecteditem = getInvLineTable().getSelectedRow()+""; 
+        System.out.println(selecteditem);
+        
+    }//GEN-LAST:event_invLineTableMouseClicked
+
+    private void IDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IDActionPerformed
 
     /**
      * @param args the command line arguments
@@ -388,6 +397,7 @@ public class SalesFrame extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+           
             public void run() {
                 new SalesFrame().setVisible(true);
             }
@@ -396,12 +406,12 @@ public class SalesFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Count;
+    private javax.swing.JTextField ID;
     private javax.swing.JTextField InvDatetxt;
     private javax.swing.JLabel InvNumlbl;
     private javax.swing.JLabel InvTotaltxt;
     private javax.swing.JLabel Namelbl;
     private javax.swing.JTextField Nametxt;
-    private javax.swing.JTextField Number;
     private javax.swing.JButton Save;
     private javax.swing.JLabel Totallbl;
     private javax.swing.JLabel h;
@@ -409,9 +419,9 @@ public class SalesFrame extends javax.swing.JFrame {
     private javax.swing.JTable invLineTable;
     private javax.swing.JTextField itemName;
     private javax.swing.JTextField itemPrice;
-    private javax.swing.JTextField itemTotal;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;
@@ -425,10 +435,9 @@ public class SalesFrame extends javax.swing.JFrame {
     private javax.swing.JTextField nameField;
     private javax.swing.JButton newItem;
     private javax.swing.JTextField numberField;
-    private javax.swing.JButton ok;
     // End of variables declaration//GEN-END:variables
     private Controller controller;
-    private Controller controller1;
+    private Controller1 Controller1;
     private ArrayList<InvoiceHeader> invoiceHeadersList;
     private ArrayList<InvoiceLine> invoiceItemsList; 
     private InvoiceHeaderTableModel headerTableModel;
@@ -451,7 +460,7 @@ public class SalesFrame extends javax.swing.JFrame {
     public void setinvoiceItemsList(ArrayList<InvoiceLine> invoiceItemsList) {//setinvoiceItemsList
         this.invoiceItemsList = invoiceItemsList;
         LineTableModel = new InvoiceLineTableModel(invoiceItemsList);
-        this.invHeaderTable.setModel(LineTableModel);
+        this.invLineTable.setModel(LineTableModel);
     }
     public JTable getInvHeaderTable() {
         return invHeaderTable;
@@ -525,6 +534,12 @@ public class SalesFrame extends javax.swing.JFrame {
         return itemName.getText();
         
     }
+    public String getID ()
+    {
+        System.out.println(ID.getText());
+        return ID.getText();
+        
+    }
 public String getItemPrice ()
     {
         System.out.println(itemPrice.getText());
@@ -537,12 +552,5 @@ public String getItemPrice ()
         return Count.getText();
         
     }
-  public String getNumber ()
-    {
-        System.out.println(Number.getText());
-        return Number.getText();
-        
-    }
-  
-
+ 
 }
