@@ -48,13 +48,16 @@ public class SalesFrame extends javax.swing.JFrame {
         Save = new javax.swing.JButton();
         Save.addActionListener(controller);
         numberField = new javax.swing.JTextField();
+        Date = new javax.swing.JTextField();
         jDialog2 = new javax.swing.JDialog();
         itemName = new javax.swing.JTextField();
         itemPrice = new javax.swing.JTextField();
-        Count = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton3.addActionListener(controller);
         ID = new javax.swing.JTextField();
+        Count = new javax.swing.JTextField();
+        addItem = new javax.swing.JButton();
+        addItem.addActionListener(controller);
+        jDialog3 = new javax.swing.JDialog();
+        error = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         invHeaderTable = new javax.swing.JTable();
         invHeaderTable.getSelectionModel().addListSelectionListener(controller);
@@ -103,6 +106,13 @@ public class SalesFrame extends javax.swing.JFrame {
             }
         });
 
+        Date.setText("Date");
+        Date.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
         jDialog1Layout.setHorizontalGroup(
@@ -110,13 +120,14 @@ public class SalesFrame extends javax.swing.JFrame {
             .addGroup(jDialog1Layout.createSequentialGroup()
                 .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDialog1Layout.createSequentialGroup()
+                        .addGap(228, 228, 228)
+                        .addComponent(Save))
+                    .addGroup(jDialog1Layout.createSequentialGroup()
                         .addGap(127, 127, 127)
                         .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(nameField)
-                            .addComponent(numberField, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jDialog1Layout.createSequentialGroup()
-                        .addGap(228, 228, 228)
-                        .addComponent(Save)))
+                            .addComponent(numberField, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                            .addComponent(Date))))
                 .addContainerGap(159, Short.MAX_VALUE))
         );
         jDialog1Layout.setVerticalGroup(
@@ -126,7 +137,9 @@ public class SalesFrame extends javax.swing.JFrame {
                 .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(numberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
                 .addComponent(Save)
                 .addGap(69, 69, 69))
         );
@@ -143,11 +156,6 @@ public class SalesFrame extends javax.swing.JFrame {
         itemPrice.setText("item price");
         itemPrice.setActionCommand("item price");
 
-        Count.setText("Count");
-        Count.setActionCommand("Count");
-
-        jButton3.setText("jButton3");
-
         ID.setText("ID");
         ID.setActionCommand("ID");
         ID.addActionListener(new java.awt.event.ActionListener() {
@@ -155,6 +163,12 @@ public class SalesFrame extends javax.swing.JFrame {
                 IDActionPerformed(evt);
             }
         });
+
+        Count.setText("Count");
+        Count.setActionCommand("Count");
+
+        addItem.setText("Ok");
+        addItem.setToolTipText("");
 
         javax.swing.GroupLayout jDialog2Layout = new javax.swing.GroupLayout(jDialog2.getContentPane());
         jDialog2.getContentPane().setLayout(jDialog2Layout);
@@ -172,7 +186,7 @@ public class SalesFrame extends javax.swing.JFrame {
                             .addComponent(ID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jDialog2Layout.createSequentialGroup()
                         .addGap(205, 205, 205)
-                        .addComponent(jButton3)))
+                        .addComponent(addItem)))
                 .addContainerGap(133, Short.MAX_VALUE))
         );
         jDialog2Layout.setVerticalGroup(
@@ -187,8 +201,27 @@ public class SalesFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Count, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46)
-                .addComponent(jButton3)
+                .addComponent(addItem)
                 .addContainerGap(37, Short.MAX_VALUE))
+        );
+
+        error.setText("This format is not supported");
+
+        javax.swing.GroupLayout jDialog3Layout = new javax.swing.GroupLayout(jDialog3.getContentPane());
+        jDialog3.getContentPane().setLayout(jDialog3Layout);
+        jDialog3Layout.setHorizontalGroup(
+            jDialog3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog3Layout.createSequentialGroup()
+                .addGap(129, 129, 129)
+                .addComponent(error)
+                .addContainerGap(121, Short.MAX_VALUE))
+        );
+        jDialog3Layout.setVerticalGroup(
+            jDialog3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog3Layout.createSequentialGroup()
+                .addGap(112, 112, 112)
+                .addComponent(error)
+                .addContainerGap(172, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -368,6 +401,10 @@ public class SalesFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_IDActionPerformed
 
+    private void DateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DateActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -406,6 +443,7 @@ public class SalesFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Count;
+    private javax.swing.JTextField Date;
     private javax.swing.JTextField ID;
     private javax.swing.JTextField InvDatetxt;
     private javax.swing.JLabel InvNumlbl;
@@ -414,6 +452,8 @@ public class SalesFrame extends javax.swing.JFrame {
     private javax.swing.JTextField Nametxt;
     private javax.swing.JButton Save;
     private javax.swing.JLabel Totallbl;
+    private javax.swing.JButton addItem;
+    private javax.swing.JLabel error;
     private javax.swing.JLabel h;
     private javax.swing.JTable invHeaderTable;
     private javax.swing.JTable invLineTable;
@@ -421,10 +461,10 @@ public class SalesFrame extends javax.swing.JFrame {
     private javax.swing.JTextField itemPrice;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;
+    private javax.swing.JDialog jDialog3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -438,11 +478,16 @@ public class SalesFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private Controller controller;
     private Controller1 Controller1;
+
+    public String getDate() {
+        return Date.getText();
+    }
+
     private ArrayList<InvoiceHeader> invoiceHeadersList;
     private ArrayList<InvoiceLine> invoiceItemsList; 
     private InvoiceHeaderTableModel headerTableModel;
     private InvoiceLineTableModel LineTableModel;
-
+    
     public Controller getController() {
         return controller;
     }
@@ -473,12 +518,12 @@ public class SalesFrame extends javax.swing.JFrame {
     public void showNewInvoiceDialogue()
     {
         jDialog1.setVisible(true);
-        jDialog1.setSize(300, 300);
+        jDialog1.setSize(500, 500);
     }
      public void showNewItemDialogue()
     {
         jDialog2.setVisible(true);
-        jDialog2.setSize(300, 300);
+        jDialog2.setSize(500, 400);
     }
   
     public String getCustomerName ()
@@ -493,7 +538,7 @@ public class SalesFrame extends javax.swing.JFrame {
         return numberField.getText();
         
     }
-     
+    
 
     public JLabel getInvNumlbl() {
         return InvNumlbl;
@@ -519,8 +564,8 @@ public class SalesFrame extends javax.swing.JFrame {
         this.Nametxt = Nametxt;
     }
 
-    public JLabel getTotallbl() {
-        return Totallbl;
+    public JLabel getInvTotaltxt() {
+        return InvTotaltxt;
     }
 
     public void setTotallbl(JLabel Totallbl) {
@@ -552,5 +597,9 @@ public String getItemPrice ()
         return Count.getText();
         
     }
+  public void Showerror(){
+      jDialog3.setVisible(true);
+        jDialog3.setSize(500, 300);
+  }
  
 }

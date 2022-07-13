@@ -20,14 +20,25 @@ public class InvoiceHeader {
     @Override
     public String toString()
     {
-        SimpleDateFormat DateFor = new SimpleDateFormat("dd-MM-yyyy");
-      String stringDate= DateFor.format(new Date());
-
-        return "\n" + this.id + "," + stringDate + "," + this.customerName ;
+        return "\n" + this.id + "," + this.getDate() + "," + this.customerName ;
+        
+  
     }
 
     public String getDate() {
-        return date;
+        try {
+            
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = sdf.parse(this.date);
+        String stringDate= sdf.format(date);
+            System.out.println(">>>>>>>" + stringDate);
+           return stringDate;
+        } catch (Exception ex) {
+                System.out.println("date formate is wrong");
+                
+        return null;
+        }
+       
     }
 
     public void setDate(String date) {

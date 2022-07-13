@@ -1,9 +1,12 @@
 package sales.controller;
 
+import com.sun.tools.jdeprscan.CSV;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableModel;
 import sales.model.InvoiceHeader;
 import sales.model.InvoiceLine;
@@ -49,8 +53,15 @@ public class Controller implements ActionListener, ListSelectionListener {
         System.out.println(actionCommand + "done");
         switch (actionCommand) {
             case "Load Files":
-                loadFiles();
+            {
+                try {
+                    loadFiles();
+                } catch (FileException ex) {
+                    Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
                 break;
+
             case "Save Files":
                 saveFiles();
                 break;
@@ -69,7 +80,7 @@ public class Controller implements ActionListener, ListSelectionListener {
             case "Save":
                 Save();
                 break;
-            case "jButton3":
+            case "Ok":
                 addItem();
                break;
                 
@@ -97,7 +108,7 @@ public class Controller implements ActionListener, ListSelectionListener {
         frame.getInvNumlbl().setText(model.getValueAt(i, 0).toString());
         frame.getInvDatetxt().setText(model.getValueAt(i, 1).toString());
         frame.getNametxt().setText(model.getValueAt(i, 2).toString());
-        frame.getTotallbl().setText(model.getValueAt(i, 3).toString());
+        frame.getInvTotaltxt().setText(model.getValueAt(i, 3).toString());
          
     }
   
@@ -156,7 +167,7 @@ public class Controller implements ActionListener, ListSelectionListener {
     private void Save() {
          invoice = new InvoiceHeader(Integer.parseInt(this.frame.getInvoiceNumber()),
                 this.frame.getCustomerName(),
-                 (new Date()).toString());
+                 this.frame.getDate());
          this.invoiceHeadersList.add(invoice);
          frame.setInvoiceHeadersList(this.invoiceHeadersList); 
     }
@@ -166,25 +177,43 @@ public class Controller implements ActionListener, ListSelectionListener {
         System.out.println("add item clicked");
       item = new InvoiceLine(Integer.parseInt(this.frame.getID()),
               this.frame.getItemName(),
-               Double.parseDouble(this.frame.getItemPrice()),
-                 Integer.parseInt(this.frame.getCount()),
-                 header);
+              Double.parseDouble(this.frame.getItemPrice()),
+              Integer.parseInt(this.frame.getCount()),
+              header);
         this.invoiceItemsList.add(item);
          frame.setinvoiceItemsList(this.invoiceItemsList); 
     }
     
-    private void loadFiles() {
+    private void loadFiles() throws FileException {
         try {
             JFileChooser fc = new JFileChooser();
-            int result = fc.showOpenDialog(frame);
-            if (result == JFileChooser.APPROVE_OPTION) {
+            ////adding file format filter////
+            /*fc.setFileSelectionMode(JFileChooser.FILES_ONLY);//
+            fc.setDialogTitle("open test");//
+            fc.removeChoosableFileFilter(fc.getFileFilter());//remove the default file filter*/
+             // FileNameExtensionFilter filter=new FileNameExtensionFilter("CSV files",".csv");//
+              // fc.addChoosableFileFilter(filter);
+             int result = fc.showOpenDialog(frame);
+               if (result == JFileChooser.APPROVE_OPTION) {
                 File headerFile = fc.getSelectedFile();
                 String headerStrPath = headerFile.getAbsolutePath();
+                   System.out.println(">>>>>>>>>>>>>>"+ headerStrPath);
+                   if(headerStrPath.endsWith("csv"))
+                   {
+                       System.out.println("accepted format");
+                   }else
+                   {
+                    this.frame.Showerror();
+
+                       System.out.println("Not accepted format");
+                       throw new FileException();
+                   }
                 hfilePath = headerStrPath;
                 Path headerPath = Paths.get(headerStrPath);
                 List<String> headerLines = Files.lines(headerPath).collect(Collectors.toList());
                 // ["1,22-11-2020,Ali", "2,13-10-2021,Saleh"]
                 this.invoiceHeadersList = new ArrayList<>();
+                //if (fc.getSelectedFile()!= 
                 for (String headerLine : headerLines) {
                     String[] parts = headerLine.split(",");
                     // parts = ["1", "22-11-2020", "Ali"]
@@ -194,14 +223,25 @@ public class Controller implements ActionListener, ListSelectionListener {
                     int id = Integer.parseInt(parts[0]);
                     InvoiceHeader invHeader = new InvoiceHeader(id, parts[2], parts[1]);
                     invoiceHeadersList.add(invHeader);
-                }
-                System.out.println("check");
+                }}
+                        
+                //System.out.println("check");
                 result = fc.showOpenDialog(frame);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     String lineStrPath = fc.getSelectedFile().getAbsolutePath();
                     ifilePath=lineStrPath;
                     Path linePath = Paths.get(lineStrPath);
                     List<String> lineLines = Files.lines(linePath).collect(Collectors.toList());
+                    System.out.println(">>>>>>>>>>>>>>"+ lineStrPath);
+                   if(lineStrPath.endsWith("csv"))
+                   {
+                       System.out.println("accepted line format");
+                   }else
+                   {
+                    this.frame.Showerror();
+                    System.out.println("Not accepted line format");
+                       throw new FileException();
+                   }
                     // ["1,Mobile,3200,1", "1,Cover,20,2", "1,Headphone,130,1", "2,Laptop,4000,1", "2,Mouse,35,1"]
                     for (String lineLine : lineLines) {
                         String[] parts = lineLine.split(",");
@@ -229,12 +269,12 @@ public class Controller implements ActionListener, ListSelectionListener {
                         header.getLines().add(invLine);
                     }}
                     frame.setInvoiceHeadersList(invoiceHeadersList);
-
-                }
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+                      }
+             }
+        catch (IOException ex) {
+            this.frame.Showerror();
+           ex.printStackTrace();
+         }
     }
 
  private void saveFiles() {
@@ -243,7 +283,6 @@ public class Controller implements ActionListener, ListSelectionListener {
             File f = new File(hfilePath);
             if(f.exists())
             f.delete();
-            
             fw = new FileWriter(this.hfilePath, true);
             BufferedWriter bwh = new BufferedWriter(fw);
             for(int i=0 ; i< this.invoiceHeadersList.size() ; i++)
@@ -279,5 +318,9 @@ public class Controller implements ActionListener, ListSelectionListener {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         } 
         
+    }
+
+    private Object extension(File headerFile) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
